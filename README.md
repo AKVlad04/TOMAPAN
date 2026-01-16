@@ -8,8 +8,9 @@ Cheia ca să meargă și când îl hostezi pe GitHub Pages: sincronizarea „rea
 
 - [index.html](index.html) – UI
 - [styles.css](styles.css) – stiluri mobile-friendly
-- [app.js](app.js) – logică joc + lobby (creare/intrare cameră)
+- [app.js](app.js) – logică joc + lobby (creare/intrare cameră) + TOMAPAN + scor
 - [firebase-config.js](firebase-config.js) – aici pui config-ul proiectului tău Firebase
+- [data/answers.seed.json](data/answers.seed.json) – „baza de date” inițială de răspunsuri (o completezi tu)
 
 ## Setup Firebase (necesar)
 
@@ -34,13 +35,27 @@ Opțiuni rapide:
 
 Apoi deschizi `http://localhost:5173/`.
 
-## Cum joci
+## Cum joci (TOMAPAN)
 
 1) Pe Telefonul 1: apasă „Creează cameră” și dă „Copiază link”.
 2) Trimite link-ul către Telefonul 2.
 3) Pe Telefonul 2: deschide link-ul și intră automat în cameră.
+4) Se alege o literă random la începutul rundei (evită Q/W/Z/X).
+5) Completați câmpurile: țări, orașe, munți, ape, plante, animale, nume.
+6) Oricine apasă „Finish” oprește runda pentru amândoi și se calculează scorul.
 
 Notă: dacă intră a 3-a persoană, va fi spectator.
+
+## Scor
+
+Per categorie (Țări / Orașe / etc):
+
+- corect și diferit: 10p fiecare
+- corect dar la fel: 5p fiecare
+- greșit: 0p
+- unul a scris (corect), celălalt gol: 10p
+
+Verificarea „corect” se face folosind [data/answers.seed.json](data/answers.seed.json) (pentru început lista e mică; o completezi tu).
 
 ## Deploy pe GitHub Pages
 
