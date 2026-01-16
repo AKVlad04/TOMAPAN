@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Joc 2 jucători (Realtime)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="top">
+        <div>
+          <h1>Joc 2 jucători</h1>
+          <p class="sub">Funcționează pe 2 telefoane (în rețele diferite) dacă îl hostezi pe GitHub Pages + Firebase.</p>
+        </div>
+      </header>
+
+      <main class="card">
+        <section class="panel" id="setupPanel">
+          <h2>Conectare</h2>
+
+          <div class="row">
+            <button id="createRoomBtn" class="primary">Creează cameră</button>
+          </div>
+
+          <div class="row">
+            <input id="roomIdInput" class="input" placeholder="Cod cameră (ex: A1B2C3)" autocomplete="off" />
+            <button id="joinRoomBtn">Intră</button>
+          </div>
+
+          <div class="row">
+            <button id="pasteFromUrlBtn" class="ghost" title="Dacă ai deschis un link cu ?room=...">Folosește camera din link</button>
+          </div>
+
+          <div class="note">
+            <strong>Tip:</strong> După ce creezi camera, trimite link-ul prietenului.
+          </div>
+        </section>
+
+        <section class="panel hidden" id="gamePanel">
+          <div class="meta">
+            <div>
+              <div class="label">Camera</div>
+              <div class="value" id="roomIdLabel">-</div>
+            </div>
+            <div>
+              <div class="label">Tu ești</div>
+              <div class="value" id="mySymbolLabel">-</div>
+            </div>
+            <div>
+              <div class="label">Rândul</div>
+              <div class="value" id="turnLabel">-</div>
+            </div>
+          </div>
+
+          <div class="row wrap">
+            <button id="copyLinkBtn" class="ghost">Copiază link</button>
+            <button id="resetBtn" class="ghost" title="Reset e permis doar pentru X">Reset</button>
+            <button id="leaveBtn" class="danger">Ieși</button>
+          </div>
+
+          <div class="status" id="statusText">—</div>
+
+          <div class="board" id="board" role="grid" aria-label="Tabla">
+            <!-- cells inserted by JS -->
+          </div>
+
+          <div class="note" id="spectatorNote">
+            Ești spectator (camera e plină). Poți doar să urmărești.
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <small>
+          Dacă vezi erori legate de Firebase config, completează <code>firebase-config.js</code>.
+        </small>
+      </footer>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
