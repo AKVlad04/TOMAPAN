@@ -5,7 +5,7 @@
 // IMPORTANT: Pentru MVP, în Firestore poți porni în "test mode".
 // Pentru producție, trebuie reguli stricte (vezi firestore.rules ca punct de plecare).
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAI90SPbmu6EoEtWhWvMgY1D4OW1jBOloI",
   authDomain: "tomapan-ccda1.firebaseapp.com",
   projectId: "tomapan-ccda1",

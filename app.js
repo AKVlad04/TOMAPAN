@@ -23,6 +23,7 @@ const els = {
   roomIdLabel: document.getElementById("roomIdLabel"),
   mySymbolLabel: document.getElementById("mySymbolLabel"),
   turnLabel: document.getElementById("turnLabel"),
+  setupStatusText: document.getElementById("setupStatusText"),
   statusText: document.getElementById("statusText"),
   board: document.getElementById("board"),
   copyLinkBtn: document.getElementById("copyLinkBtn"),
@@ -333,7 +334,8 @@ function showGamePanel() {
 }
 
 function setStatus(text) {
-  els.statusText.textContent = text;
+  if (els.statusText) els.statusText.textContent = text;
+  if (els.setupStatusText) els.setupStatusText.textContent = text;
 }
 
 function showError(e) {
