@@ -77,9 +77,18 @@
             </div>
 
             <div class="overlay hidden" id="letterOverlay" aria-hidden="true">
-              <div class="matrix">
-                <div class="matrixHint">Se alege litera...</div>
-                <div class="matrixLetter" id="matrixLetter">A</div>
+              <div class="matrix" id="matrixBox">
+                <div class="heartsLayer" id="heartsLayer" aria-hidden="true"></div>
+                <div class="matrixStage" id="matrixStage" aria-hidden="true">
+                  <div class="bugCanvas" id="bugCanvas" aria-hidden="true"></div>
+                  <div class="giftLayer hidden" id="giftLayer" aria-hidden="true"></div>
+                  <div class="matrixHint" id="matrixHint">Se alege litera...</div>
+                  <div class="matrixLetter" id="matrixLetter">A</div>
+                </div>
+                <div class="row wrap center matrixActions" id="matrixActions">
+                  <button id="valentineNoBtn" class="danger hidden" type="button">Nu</button>
+                  <button id="valentineAcceptBtn" class="primary hidden" type="button">Da</button>
+                </div>
               </div>
             </div>
 
@@ -131,6 +140,7 @@
             <section class="results hidden" id="resultsPanel">
               <h3>Rezultate</h3>
               <div class="resultsMeta" id="resultsMeta">—</div>
+
               <div class="tableWrap">
                 <table class="table" id="resultsTable" aria-label="Rezultate TOMAPAN"></table>
               </div>

@@ -21,12 +21,65 @@ body{
   color: var(--text);
 }
 
+.ambientHearts{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambientHeart{
+  position: absolute;
+  top: -24px;
+  left: var(--x, 50%);
+  font-size: var(--s, 14px);
+  line-height: 1;
+  opacity: var(--a, 0.35);
+  color: var(--c, rgba(251,113,133,0.35));
+  text-shadow: 0 0 16px var(--glow, rgba(251,113,133,0.18));
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: ambientFall var(--d, 6.8s) linear forwards;
+}
+
+@keyframes ambientFall{
+  from{ transform: translate3d(0, -30px, 0) rotate(0deg); }
+  to{ transform: translate3d(var(--dx, 0px), calc(100vh + 80px), 0) rotate(220deg); }
+}
+
 .hidden{display:none !important}
 
 .app{
   max-width: 820px;
   margin: 0 auto;
   padding: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.toast{
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,0.28);
+  background: rgba(10,12,18,0.72);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55), 0 0 40px rgba(251,113,133,0.10);
+  color: rgba(254,202,202,0.95);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .card{
@@ -36,6 +89,28 @@ body{
   box-shadow: var(--shadow);
   padding: 16px;
 }
+
+body.valentineMode .card{
+  border-color: rgba(251,113,133,0.38);
+  box-shadow: 0 10px 34px rgba(0,0,0,0.38), 0 0 0 1px rgba(251,113,133,0.10), 0 0 52px rgba(251,113,133,0.10);
+  position: relative;
+  overflow: hidden;
+}
+
+body.valentineMode .card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.10;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none'%3E%3Cpath d='M48 69c-1 0-2-.4-2.8-1.2C35.6 58.2 24 50 24 38.7 24 31.1 29.6 26 36.6 26c4 0 7.9 1.9 10.2 5 2.3-3.1 6.2-5 10.2-5C64 26 70 31.1 70 38.7 70 50 58.4 58.2 50.8 67.8 50 68.6 49 69 48 69Z' fill='rgba(251,113,133,0.85)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px;
+  background-repeat: repeat;
+  mix-blend-mode: screen;
+}
+
+body.valentineMode .card > *{ position: relative; z-index: 1; }
 
 .panel h2{
   margin: 0 0 12px;
@@ -206,16 +281,402 @@ button.ghost{background: transparent}
   z-index: 50;
 }
 
+.valentineCard{
+  width: min(720px, calc(100vw - 28px));
+  border-radius: 18px;
+  border: 1px solid rgba(251,113,133,0.28);
+  background: rgba(0,0,0,0.22);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  padding: 14px;
+}
+
+.valentineTitle{
+  color: rgba(251,113,133,0.80);
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.valentineCanvas{
+  position: relative;
+  height: min(360px, 52vh);
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(238,242,255,0.10);
+  background: radial-gradient(120% 120% at 50% 30%, rgba(251,113,133,0.10), rgba(0,0,0,0.08));
+}
+
+.rainLetter{
+  position: absolute;
+  top: -40px;
+  left: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--c, rgba(238,242,255,0.65));
+  text-shadow: 0 0 14px var(--glow, rgba(125,211,252,0.14));
+  user-select: none;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform, top, left, opacity;
+}
+
+.rainLetter.ghost{
+  opacity: 0.48;
+}
+
+.rainLetter.msg{
+  color: rgba(251,113,133,0.95);
+  text-shadow: 0 0 18px rgba(251,113,133,0.22);
+  font-size: 22px;
+}
+
+.rainLetter.fade{
+  opacity: 0;
+}
+
+.rainLetter.settle{
+  transition: left 900ms cubic-bezier(.2,.85,.2,1), top 900ms cubic-bezier(.2,.85,.2,1), opacity 900ms ease;
+}
+
+@keyframes rainFall {
+  from { transform: translate3d(var(--dx, 0px), 0, 0); opacity: 0; }
+  8% { opacity: 1; }
+  to { transform: translate3d(0, calc(var(--fall, 420px)), 0); opacity: 1; }
+}
+
+.valentineCard.shake{
+  animation: shake 520ms cubic-bezier(.36,.07,.19,.97) both;
+  border-color: rgba(251,113,133,0.60);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+
 .matrix{
+  --bugScale: 1;
+  position: relative;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
   text-align:center;
-  padding: 18px;
+  min-width: 240px;
+  padding: 16px 16px 12px;
   border-radius: 18px;
   border: 1px solid rgba(125,211,252,0.28);
   background: rgba(0,0,0,0.25);
   box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  transform: scale(var(--bugScale));
+  transform-origin: 50% 50%;
+  transition: transform 2600ms cubic-bezier(.2,.85,.2,1), border-color 2600ms ease, box-shadow 2600ms ease, min-width 2600ms cubic-bezier(.2,.85,.2,1), padding 2600ms cubic-bezier(.2,.85,.2,1);
+}
+
+.matrix::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius: 18px;
+  background:
+    radial-gradient(160% 120% at 50% 35%, rgba(239,68,68,0.34), rgba(0,0,0,0.00) 60%),
+    radial-gradient(120% 120% at 50% 110%, rgba(239,68,68,0.22), rgba(0,0,0,0.00) 60%);
+  opacity: 0;
+  transition: opacity 2600ms ease;
+  pointer-events:none;
+}
+
+.matrix::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, rgba(0,0,0,0.00) 2px, rgba(0,0,0,0.00) 6px);
+  opacity: 0;
+  mix-blend-mode: overlay;
+  pointer-events:none;
+}
+
+.matrix.bug{
+  --bugScale: 1.06;
+  min-width: min(760px, calc(100vw - 44px));
+  padding: 22px 22px 14px;
+  border-color: rgba(239,68,68,0.78);
+  box-shadow: 0 26px 110px rgba(239,68,68,0.16), 0 18px 60px rgba(0,0,0,0.55);
+  animation: bugPulse 1400ms ease-in-out infinite;
+}
+
+.matrixStage{
+  position: relative;
+  width: 100%;
+  height: 140px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: height 2600ms cubic-bezier(.2,.85,.2,1);
+}
+
+.heartsLayer{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  filter: saturate(1.05);
+}
+
+.matrix.bug .heartsLayer{opacity: 0.92}
+
+.heart{
+  position: absolute;
+  width: var(--s, 18px);
+  height: var(--s, 18px);
+  background: var(--c, rgba(251,113,133,0.16));
+  opacity: var(--a, 0.85);
+  border-radius: 4px;
+  box-shadow: 0 0 18px var(--glow, rgba(251,113,133,0.12));
+  transform: translate3d(0,0,0) rotate(45deg);
+  will-change: transform;
+}
+
+.heart::before,
+.heart::after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--c, rgba(251,113,133,0.16));
+  border-radius: 50%;
+}
+
+.heart::before{ top: -50%; left: 0; }
+.heart::after{ left: -50%; top: 0; }
+
+.matrix.bug .matrixStage{
+  height: min(300px, 52vh);
+}
+
+.matrix.bug::before{
+  opacity: 1;
+}
+
+.matrix.bug::after{
+  opacity: 0.16;
+  animation: scan 900ms linear infinite;
+}
+
+@keyframes bugPulse {
+  0%, 100% { filter: saturate(1) contrast(1); }
+  50% { filter: saturate(1.15) contrast(1.05); }
+}
+
+@keyframes scan {
+  from { transform: translateY(0px); }
+  to { transform: translateY(6px); }
+}
+
+.matrix.shake{
+  animation: matrixShake 260ms cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes matrixShake {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(var(--bugScale)); }
+  20% { transform: translate3d(-1px, 0, 0) scale(var(--bugScale)); }
+  40% { transform: translate3d(1px, 0, 0) scale(var(--bugScale)); }
+  60% { transform: translate3d(-1px, 0, 0) scale(var(--bugScale)); }
+  80% { transform: translate3d(1px, 0, 0) scale(var(--bugScale)); }
+}
+
+.bugCanvas{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.giftLayer{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  pointer-events: none;
+}
+
+.giftStack{
+  width: min(520px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.giftImg{
+  width: min(420px, 100%);
+  height: 230px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(254,202,202,0.22);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35);
+  filter: saturate(1.05) contrast(1.05);
+  opacity: 0;
+  transform: translate3d(0, 6px, 0) scale(0.985);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.giftImg.show{
+  opacity: 0.96;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@media (max-width: 520px){
+  .giftImg{height: 250px;}
+}
+
+.modalBackdrop{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 60;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.modalBackdrop.show{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modalCard{
+  width: min(520px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(251,113,133,0.28);
+  background: rgba(15,19,32,0.92);
+  box-shadow: 0 26px 90px rgba(0,0,0,0.62), 0 0 60px rgba(251,113,133,0.12);
+  padding: 16px 16px;
+  transform: translate3d(0, 10px, 0) scale(0.985);
+  transition: transform 260ms cubic-bezier(.2,.85,.2,1);
+  text-align: center;
+}
+
+.modalBackdrop.show .modalCard{
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.modalTitle{
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  color: rgba(254,202,202,0.98);
+}
+
+.modalSub{
+  margin: 10px 0 0;
+  color: rgba(238,242,255,0.78);
+  font-size: 13px;
+}
+
+.matrixHint,
+.matrixLetter{
+  position: relative;
+  z-index: 3;
+}
+
+.matrix.bug .bugCanvas{
+  opacity: 1;
+  filter: saturate(1.08);
+}
+
+.bugLetter{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-weight: 900;
+  font-size: 18px;
+  color: rgba(238,242,255,0.70);
+  text-shadow: 0 0 16px rgba(125,211,252,0.18);
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.bugMsgLetter{
+  position: absolute;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-weight: 900;
+  font-size: 30px;
+  color: rgba(254,202,202,0.98);
+  text-shadow: 0 0 22px rgba(239,68,68,0.22);
+  user-select: none;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.matrix.bug .bugLetter{
+  color: rgba(254,202,202,0.90);
+  text-shadow: 0 0 18px rgba(239,68,68,0.20);
+}
+
+.matrixActions{
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+  position: relative;
+  z-index: 3;
+}
+
+.matrixActions button:active{transform: none}
+
+.matrixActions button{
+  transition: font-size 180ms ease, padding 180ms ease;
+  min-width: 140px;
+}
+
+.row.center{
+  justify-content: center;
 }
 
 .matrixHint{color: rgba(125,211,252,0.75); font-size: 13px; letter-spacing: 0.4px; margin-bottom: 12px}
+
+.matrix.bug .matrixHint{
+  color: rgba(254,202,202,0.92);
+  letter-spacing: 0.8px;
+  font-weight: 800;
+  text-shadow: 0 0 16px rgba(239,68,68,0.18);
+}
+
+.matrix.cinematic .rainLetter.msg{
+  animation: msgPulse 520ms ease-in-out infinite;
+}
+
+@keyframes msgPulse{
+  0%,100%{ transform: scale(1); filter: saturate(1) brightness(1); }
+  50%{ transform: scale(1.06); filter: saturate(1.15) brightness(1.08); }
+}
 
 .matrixLetter{
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -224,6 +685,17 @@ button.ghost{background: transparent}
   letter-spacing: 6px;
   color: var(--primary);
   text-shadow: 0 0 16px rgba(125,211,252,0.35);
+  transition: transform 900ms cubic-bezier(.2,.85,.2,1), opacity 700ms ease, filter 700ms ease;
+}
+
+.matrixLetter.loading{
+  opacity: 0.95;
+  animation: loadingGlow 720ms ease-in-out infinite;
+}
+
+@keyframes loadingGlow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(125,211,252,0.18)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 22px rgba(125,211,252,0.28)); transform: scale(1.03); }
 }
 
 .matrixLetter.pulse{animation: pulse 900ms ease-in-out 1}
@@ -232,6 +704,26 @@ button.ghost{background: transparent}
   0% { transform: scale(1); opacity: 1; }
   40% { transform: scale(1.06); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
+}
+
+.matrixLetter.glitch{
+  animation: glitch 420ms steps(2, end) infinite;
+  filter: drop-shadow(2px 0 0 rgba(239,68,68,0.35)) drop-shadow(-2px 0 0 rgba(56,189,248,0.25));
+}
+
+.matrixLetter.vanish{
+  opacity: 0;
+  transform: scale(0.92);
+  filter: blur(2px);
+}
+
+@keyframes glitch {
+  0% { transform: translate3d(0,0,0) skewX(0deg); }
+  20% { transform: translate3d(-2px,0,0) skewX(3deg); }
+  40% { transform: translate3d(2px,-1px,0) skewX(-3deg); }
+  60% { transform: translate3d(-1px,1px,0) skewX(2deg); }
+  80% { transform: translate3d(1px,0,0) skewX(-2deg); }
+  100% { transform: translate3d(0,0,0) skewX(0deg); }
 }
 
 @media (max-width: 520px){

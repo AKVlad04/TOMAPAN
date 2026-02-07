@@ -35,12 +35,46 @@ const els = {
   waitingSub: document.getElementById("waitingSub"),
   startBtn: document.getElementById("startBtn"),
   letterOverlay: document.getElementById("letterOverlay"),
+  matrixBox: document.getElementById("matrixBox"),
+  matrixStage: document.getElementById("matrixStage"),
+  matrixHint: document.getElementById("matrixHint"),
   matrixLetter: document.getElementById("matrixLetter"),
+  matrixActions: document.getElementById("matrixActions"),
+  bugCanvas: document.getElementById("bugCanvas"),
+  heartsLayer: document.getElementById("heartsLayer"),
+  giftLayer: document.getElementById("giftLayer"),
   answersForm: document.getElementById("answersForm"),
   finishBtn: document.getElementById("finishBtn"),
   resultsPanel: document.getElementById("resultsPanel"),
   resultsMeta: document.getElementById("resultsMeta"),
   resultsTable: document.getElementById("resultsTable"),
+  valentineNoBtn: document.getElementById("valentineNoBtn"),
+  valentineAcceptBtn: document.getElementById("valentineAcceptBtn"),
+};
+
+const VALENTINE_GIF_URLS = [
+  "https://media1.tenor.com/m/RiZpodi6JD0AAAAC/fast-cat-cat-excited.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXAwMG1ubGVvcms5OGoweXFtYTVndjVmcDUxNDRhbmQ1NXl3Mmt4ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ujTVMASREzuRbH6zy5/giphy.gif",
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjZ4NWZ3cGtjbGZ1am9icTBpcW50YTNuN3BpaGlrYjRibm1xMmMzNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2UwId6UJEsvLYd2UY9/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTc2dGFxaTgwcDY5eHRvZWJjeG9vN25kM2tubTh6cGRreDEwNW4ydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/k1Psl92gw7YPSPYFKm/giphy.gif",
+  "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGN5ZWh0N20yeDNjem8zaWZhcGx4ZXlmOWJ2eWZkOXdlMXEzYTBqNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/04DMYESomjb6BCBNB8/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExanQ3aDF4aXpocmo0MG1ndnJ3azlubnppcjB4bWxkZTAybzY4Y2o1MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Ch0JvNvkk7PH2/giphy.gif",
+  "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnc1eW5yaml0c21uNzVrc2Z3aXhlZjF0cDB4a2Rpemo3NnBhcTRqYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/t3sZxY5zS5B0z5zMIz/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExanpoYzJhNnp2d2thOG54ZGRyY3JnMDNzbnk1ZXpqNjZ3N3JwZGlxdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/hryis7A55UXZNCUTNA/giphy.gif",
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemozeXEwcXRtaWlxajE3bnh2dnRkNmNlbWR1NWM3MXBuNmU3YTdpdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yLieULk2FUW6EvkWjA/giphy.gif",
+  "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ211aHc0ZXA5eW91cDBwaW5ycnR5dXJ5bWI2aGx2MWl1YmIwOXA4bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT5LMHxhOfscxPfIfm/giphy.gif",
+  "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTZjZG5kejB3NmhwYTZzaXppNGtub20zaTZtZmIycGFjeW5xamIybyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rjkJD1v80CjYs/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzRnc3JhbDgyNzFzM3FueXRkd2E2bmVmNTQycmN5NDN0OXlyeWJtMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/F1P5wA3Ai0jFAAWQFA/giphy.gif",
+  "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWU3OTBpN3ljaTNzd3ZxMG5sZDMxNmtva282emhkN2l5amxseXd5dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6Lwg2xvTr6tJpuSTd/giphy.gif",
+  "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGpncWt5cXFtZGg5NHYwZm5sbnRncjF5bHkyZTJqaWhzYzIwcmhzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13Iu9mjLpXF0ek/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTBkOWZoYnViNHJvczhuemJjb2Fqd2UzN3lnanhwczRmcGFoa3V0YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ddHhhUBn25cuQ/giphy.gif",
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG81cW9iN3ZybTQ5dTI3OG4zdHhma2s2M2k4bzc2dGdkeTRxanUzeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QlvPwCTw59B2E/giphy.gif",
+];
+
+const VALENTINE_EVENT = {
+  id: "valentine_2026",
+  threshold: 150,
+  messageLines: ["WILL YOU BE MY", "VALENTINE?"]
 };
 
 const state = {
@@ -57,6 +91,18 @@ const state = {
   lastRoundSeen: null,
   lastStartKey: "",
   startAdvanceTimer: null,
+  lastValentinePlayKey: "",
+  valentineNoClicks: 0,
+  bugLetterTimers: [],
+  heartsRaf: 0,
+  heartsLastTs: 0,
+  hearts: [],
+  heartsBoost: 1,
+  ambientHeartsTimer: 0,
+  ambientHeartsEl: null,
+  valentineModeOn: false,
+  cinematicTimers: [],
+  giftTimers: [],
 };
 
 boot().catch(showError);
@@ -152,9 +198,72 @@ function wireUI() {
     leaveRoom().catch(showError);
   });
 
+  els.valentineNoBtn?.addEventListener("click", () => {
+    onValentineNo();
+  });
+
+  els.valentineAcceptBtn?.addEventListener("click", async () => {
+    try {
+      await onValentineAccept();
+    } catch (e) {
+      showError(e);
+    }
+  });
+
   window.addEventListener("beforeunload", () => {
     if (state.unsubRoom) state.unsubRoom();
   });
+}
+
+function showToast(message, { durationMs = 1500 } = {}) {
+  let el = document.getElementById("toast");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "toast";
+    el.className = "toast";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  el.classList.add("show");
+  window.setTimeout(() => el.classList.remove("show"), Math.max(400, durationMs));
+}
+
+function ensureThemeModal() {
+  let backdrop = document.getElementById("themeModal");
+  if (backdrop && document.body.contains(backdrop)) return backdrop;
+
+  backdrop = document.createElement("div");
+  backdrop.id = "themeModal";
+  backdrop.className = "modalBackdrop";
+  backdrop.setAttribute("aria-hidden", "true");
+
+  const card = document.createElement("div");
+  card.className = "modalCard";
+
+  const title = document.createElement("h3");
+  title.className = "modalTitle";
+  title.textContent = "Tema nouă deblocată";
+
+  const sub = document.createElement("div");
+  sub.className = "modalSub";
+  sub.textContent = "Acum ai accent roz + inimioare pe fundal.";
+
+  card.appendChild(title);
+  card.appendChild(sub);
+  backdrop.appendChild(card);
+  document.body.appendChild(backdrop);
+  return backdrop;
+}
+
+async function showThemeUnlockedModal({ visibleMs = 2400 } = {}) {
+  const el = ensureThemeModal();
+  el.classList.add("show");
+  el.setAttribute("aria-hidden", "false");
+  await new Promise((r) => window.setTimeout(r, Math.max(900, visibleMs)));
+  el.classList.remove("show");
+  el.setAttribute("aria-hidden", "true");
+  await new Promise((r) => window.setTimeout(r, 280));
 }
 
 function initBoardUI() {
@@ -360,7 +469,10 @@ function renderRoom() {
   }
 
   // Matrix start animation
-  if (bothPlayers && isStarting && !isFinished) {
+  const event = room.event || {};
+  const bugActive = bothPlayers && isStarting && event?.id === VALENTINE_EVENT.id && Boolean(event?.triggered) && !Boolean(event?.completed);
+
+  if (bothPlayers && isStarting && !isFinished && !bugActive) {
     const startKey = String(room.startedAtMs || room.startedAt?.seconds || room.startedAt || "") + ":" + String(round);
     if (startKey && state.lastStartKey !== startKey) {
       state.lastStartKey = startKey;
@@ -370,6 +482,27 @@ function renderRoom() {
     // If starting has been going on for a while, advance to playing (any client can do this).
     maybeAdvanceToPlaying(room).catch(() => {});
   }
+
+  // Special Valentine "bug" (runs during starting and blocks the round)
+  if (bugActive) {
+    if (String(event.stage || "bug") === "gifts") {
+      showValentineGifts();
+    }
+    const playKey = String(event.triggeredAtMs || "");
+    if (playKey && state.lastValentinePlayKey !== playKey) {
+      state.lastValentinePlayKey = playKey;
+      state.valentineNoClicks = 0;
+      window.setTimeout(() => {
+        if (String((state.room?.event || {}).stage || "bug") !== "gifts") {
+          playValentineBug(room.letter || "A").catch(() => {});
+        }
+      }, 900);
+    }
+  }
+
+  // Persistent Valentine visual mode for the whole match.
+  const modeActive = event?.id === VALENTINE_EVENT.id && Boolean(event?.mode);
+  setValentineMode(modeActive);
 
   if (!bothPlayers) {
     setStatus("Aștept jucătorul 2... Trimite link-ul.");
@@ -382,6 +515,138 @@ function renderRoom() {
   }
 
   renderResultsIfFinished(room);
+}
+
+function showValentineGifts() {
+  const overlay = els.letterOverlay;
+  const box = els.matrixBox;
+  const giftLayer = els.giftLayer;
+  if (!overlay || !box || !giftLayer) return;
+
+  overlay.classList.remove("hidden");
+  overlay.setAttribute("aria-hidden", "false");
+  box.classList.add("bug");
+  startHeartsScreensaver();
+
+  if (els.bugCanvas) els.bugCanvas.innerHTML = "";
+  if (els.matrixHint) els.matrixHint.textContent = "";
+  if (els.matrixLetter) {
+    els.matrixLetter.style.display = "none";
+    els.matrixLetter.textContent = "";
+  }
+
+  giftLayer.classList.remove("hidden");
+  giftLayer.setAttribute("aria-hidden", "false");
+
+  // Rebuild each time so the sequential reveal is immediate.
+  for (const t of state.giftTimers) clearTimeout(t);
+  state.giftTimers = [];
+  giftLayer.dataset.ready = "";
+  giftLayer.innerHTML = "";
+
+  const wrap = document.createElement("div");
+  wrap.className = "giftStack";
+  giftLayer.appendChild(wrap);
+
+  const img = document.createElement("img");
+  img.className = "giftImg";
+  img.alt = "gif";
+  img.loading = "eager";
+  img.decoding = "async";
+  img.referrerPolicy = "no-referrer";
+  wrap.appendChild(img);
+
+  // Slideshow: show one GIF at a time, centered.
+  const urls = Array.isArray(VALENTINE_GIF_URLS) ? VALENTINE_GIF_URLS : [];
+  const perGifMs = 1400;
+  const fadeMs = 160;
+  let idx = 0;
+
+  const showOne = () => {
+    if (overlay.classList.contains("hidden")) return;
+    const stage = String((state.room?.event || {}).stage || "bug");
+    if (stage !== "gifts") return;
+    if (!urls.length) return;
+    const url = urls[idx] || "";
+    img.classList.remove("show");
+    const t1 = window.setTimeout(() => {
+      img.src = url;
+      // Ensure we re-trigger the transition.
+      void img.offsetWidth;
+      img.classList.add("show");
+    }, fadeMs);
+    state.giftTimers.push(t1);
+
+    idx = (idx + 1) % urls.length;
+    const t2 = window.setTimeout(showOne, perGifMs);
+    state.giftTimers.push(t2);
+  };
+
+  const t0 = window.setTimeout(showOne, 0);
+  state.giftTimers.push(t0);
+
+  els.valentineNoBtn?.classList.add("hidden");
+  if (els.valentineAcceptBtn) {
+    // Second click should feel like "exit" from the Valentine flow.
+    els.valentineAcceptBtn.textContent = "Gata";
+    els.valentineAcceptBtn.classList.remove("hidden");
+  }
+}
+
+async function setValentineStage(stage) {
+  if (!state.roomId) return;
+  const ref = doc(db, "rooms", state.roomId);
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists()) return;
+    const room = snap.data();
+    const event = room.event || {};
+    if (event?.id !== VALENTINE_EVENT.id || !event?.triggered) return;
+    if (Boolean(event?.completed)) return;
+    tx.update(ref, {
+      event: {
+        ...event,
+        stage,
+        stageAt: serverTimestamp(),
+        stageAtMs: Date.now(),
+      },
+      lastUpdateAt: serverTimestamp(),
+    });
+  });
+}
+
+async function advanceToPlayingNow() {
+  if (!state.roomId) return;
+  const ref = doc(db, "rooms", state.roomId);
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists()) return;
+    const cur = snap.data();
+    if ((cur.status || "") !== "starting") return;
+    const event = cur.event || {};
+    if (event?.id === VALENTINE_EVENT.id && Boolean(event?.triggered) && !Boolean(event?.completed)) return;
+    tx.update(ref, {
+      status: "playing",
+      lastUpdateAt: serverTimestamp(),
+    });
+  });
+}
+
+async function onValentineAccept() {
+  const stage = String((state.room?.event || {}).stage || "bug");
+  if (stage === "gifts") {
+    if (els.valentineAcceptBtn) els.valentineAcceptBtn.disabled = true;
+    await showThemeUnlockedModal({ visibleMs: 2500 });
+    await completeValentineEvent({ enableMode: true, returnToLobby: true });
+    setValentineMode(true);
+    hideValentineBug();
+    if (els.valentineAcceptBtn) els.valentineAcceptBtn.disabled = false;
+    return;
+  }
+
+  // First "Da": show GIFs immediately.
+  showValentineGifts();
+  await setValentineStage("gifts");
 }
 
 async function startRound(roomId) {
@@ -398,10 +663,31 @@ async function startRound(roomId) {
     const status = room.status || "lobby";
     if (status === "playing" || status === "finished") return;
 
+    const event = room.event || {};
+    const shouldTriggerBug = event?.id === VALENTINE_EVENT.id && Boolean(event?.bugReady) && !Boolean(event?.triggered);
+
+    const startedAtMs = Date.now();
+
     tx.update(ref, {
       status: "starting",
       startedAt: serverTimestamp(),
-      startedAtMs: Date.now(),
+      startedAtMs,
+      ...(shouldTriggerBug
+        ? {
+            event: {
+              ...event,
+              id: VALENTINE_EVENT.id,
+              unlocked: true,
+              bugReady: false,
+              triggered: true,
+              triggeredAt: serverTimestamp(),
+              triggeredAtMs: startedAtMs,
+              triggeredBy: state.uid,
+              completed: false,
+              stage: "bug",
+            },
+          }
+        : {}),
       lastUpdateAt: serverTimestamp(),
     });
   });
@@ -427,6 +713,11 @@ function scheduleAdvanceToPlaying(room) {
 async function maybeAdvanceToPlaying(room) {
   if (!state.roomId) return;
   if ((room.status || "") !== "starting") return;
+
+  const event = room.event || {};
+  if (event?.id === VALENTINE_EVENT.id && Boolean(event?.triggered) && !Boolean(event?.completed)) {
+    return;
+  }
 
   let startedMs = Number(room.startedAtMs);
   if (!Number.isFinite(startedMs) || startedMs <= 0) {
@@ -480,6 +771,661 @@ function playMatrixLetter(finalLetter) {
     raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);
+}
+
+function hideValentineBug() {
+  els.valentineNoBtn?.classList.add("hidden");
+  els.valentineAcceptBtn?.classList.add("hidden");
+  if (els.valentineAcceptBtn) els.valentineAcceptBtn.textContent = "Da";
+  if (els.bugCanvas) els.bugCanvas.innerHTML = "";
+  if (els.giftLayer) {
+    els.giftLayer.classList.add("hidden");
+    els.giftLayer.setAttribute("aria-hidden", "true");
+    els.giftLayer.dataset.ready = "";
+    els.giftLayer.innerHTML = "";
+  }
+  stopHeartsScreensaver();
+  if (els.matrixBox) {
+    els.matrixBox.classList.remove("bug");
+    els.matrixBox.classList.remove("shake");
+    els.matrixBox.classList.remove("cinematic");
+    els.matrixBox.style.removeProperty("--bugScale");
+  }
+  for (const t of state.bugLetterTimers) clearTimeout(t);
+  state.bugLetterTimers = [];
+  for (const t of state.giftTimers) clearTimeout(t);
+  state.giftTimers = [];
+  if (els.letterOverlay) {
+    els.letterOverlay.classList.add("hidden");
+    els.letterOverlay.setAttribute("aria-hidden", "true");
+  }
+  if (els.matrixLetter) {
+    els.matrixLetter.classList.remove("glitch");
+    els.matrixLetter.classList.remove("vanish");
+    els.matrixLetter.style.removeProperty("display");
+    els.matrixLetter.style.removeProperty("opacity");
+    els.matrixLetter.textContent = "";
+  }
+  resetNoButtonPosition();
+  if (els.valentineNoBtn) {
+    els.valentineNoBtn.style.removeProperty("font-size");
+    els.valentineNoBtn.style.removeProperty("padding");
+  }
+  if (els.valentineAcceptBtn) {
+    els.valentineAcceptBtn.style.removeProperty("font-size");
+    els.valentineAcceptBtn.style.removeProperty("padding");
+  }
+  applyValentineButtonScaling(0);
+}
+
+function setValentineMode(on) {
+  const next = Boolean(on);
+  if (state.valentineModeOn === next) return;
+  state.valentineModeOn = next;
+  document.body.classList.toggle("valentineMode", next);
+  if (next) startAmbientHeartRain();
+  else stopAmbientHeartRain();
+}
+
+function ensureAmbientHeartsEl() {
+  if (state.ambientHeartsEl && document.body.contains(state.ambientHeartsEl)) return state.ambientHeartsEl;
+  const el = document.createElement("div");
+  el.className = "ambientHearts";
+  document.body.prepend(el);
+  state.ambientHeartsEl = el;
+  return el;
+}
+
+function stopAmbientHeartRain() {
+  if (state.ambientHeartsTimer) window.clearInterval(state.ambientHeartsTimer);
+  state.ambientHeartsTimer = 0;
+  if (state.ambientHeartsEl) state.ambientHeartsEl.innerHTML = "";
+}
+
+function startAmbientHeartRain() {
+  stopAmbientHeartRain();
+  const el = ensureAmbientHeartsEl();
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const palette = [
+    { c: "rgba(251,113,133,0.32)", glow: "rgba(251,113,133,0.22)" },
+    { c: "rgba(244,114,182,0.28)", glow: "rgba(244,114,182,0.18)" },
+    { c: "rgba(253,186,116,0.24)", glow: "rgba(253,186,116,0.14)" },
+    { c: "rgba(250,204,21,0.20)", glow: "rgba(250,204,21,0.12)" },
+    { c: "rgba(125,211,252,0.20)", glow: "rgba(125,211,252,0.12)" },
+  ];
+
+  const spawn = () => {
+    if (!state.valentineModeOn) return;
+    const h = document.createElement("div");
+    h.className = "ambientHeart";
+    h.textContent = "♥";
+
+    const p = palette[Math.floor(Math.random() * palette.length)];
+    const s = Math.round(rand(10, 22));
+    const a = rand(0.18, 0.52);
+    const d = rand(5.2, 10.0);
+    const x = rand(0, 100);
+    const dx = rand(-80, 80);
+
+    h.style.setProperty("--c", p.c);
+    h.style.setProperty("--glow", p.glow);
+    h.style.setProperty("--s", `${s}px`);
+    h.style.setProperty("--a", String(a));
+    h.style.setProperty("--d", `${d.toFixed(2)}s`);
+    h.style.setProperty("--x", `${x.toFixed(2)}%`);
+    h.style.setProperty("--dx", `${dx.toFixed(1)}px`);
+
+    el.appendChild(h);
+    window.setTimeout(() => h.remove(), Math.ceil(d * 1000) + 250);
+  };
+
+  // Density tuned to be noticeable but not too heavy.
+  state.ambientHeartsTimer = window.setInterval(() => {
+    spawn();
+    if (Math.random() < 0.45) spawn();
+  }, 180);
+}
+
+function resetNoButtonPosition() {
+  const noBtn = els.valentineNoBtn;
+  const yesBtn = els.valentineAcceptBtn;
+  const actions = els.matrixActions;
+  if (!noBtn || !actions) return;
+
+  if (actions.contains(noBtn)) {
+    // keep order Nu then Da
+    if (yesBtn && actions.contains(yesBtn) && noBtn.nextSibling !== yesBtn) {
+      actions.insertBefore(noBtn, yesBtn);
+    }
+  } else {
+    if (yesBtn && actions.contains(yesBtn)) actions.insertBefore(noBtn, yesBtn);
+    else actions.prepend(noBtn);
+  }
+
+}
+
+function stopHeartsScreensaver() {
+  if (state.heartsRaf) cancelAnimationFrame(state.heartsRaf);
+  state.heartsRaf = 0;
+  state.heartsLastTs = 0;
+  state.hearts = [];
+  state.heartsBoost = 1;
+  if (els.heartsLayer) els.heartsLayer.innerHTML = "";
+}
+
+function startHeartsScreensaver() {
+  const layer = els.heartsLayer;
+  const box = els.matrixBox;
+  const overlay = els.letterOverlay;
+  if (!layer || !box || !overlay) return;
+
+  stopHeartsScreensaver();
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  const palette = [
+    { c: "rgba(251,113,133,0.18)", glow: "rgba(251,113,133,0.14)" },
+    { c: "rgba(244,114,182,0.16)", glow: "rgba(244,114,182,0.12)" },
+    { c: "rgba(253,186,116,0.14)", glow: "rgba(253,186,116,0.10)" },
+    { c: "rgba(250,204,21,0.12)", glow: "rgba(250,204,21,0.10)" },
+    { c: "rgba(94,234,212,0.12)", glow: "rgba(94,234,212,0.10)" },
+    { c: "rgba(125,211,252,0.12)", glow: "rgba(125,211,252,0.10)" },
+  ];
+
+  // Use the matrix box for initial sizing. The layer can report 0/1px on the first frame.
+  // Also compute a *target* (expanded) box size so spawns cover the final area even while it grows.
+  const boxRect = box.getBoundingClientRect();
+  const stageRect = els.matrixStage?.getBoundingClientRect?.() || { height: 0 };
+  const actionsRect = els.matrixActions?.getBoundingClientRect?.() || { height: 0 };
+
+  const wNow = Math.max(1, boxRect.width);
+  const hNow = Math.max(1, boxRect.height);
+
+  // If the overlay just became visible, layout may not be ready yet.
+  if (wNow < 80 || hNow < 80) {
+    let tries = 0;
+    const retry = () => {
+      if (overlay.classList.contains("hidden")) return;
+      const r = box.getBoundingClientRect();
+      const w = Math.max(1, r.width);
+      const h = Math.max(1, r.height);
+      if (w >= 80 && h >= 80) {
+        startHeartsScreensaver();
+        return;
+      }
+      tries += 1;
+      if (tries < 8) requestAnimationFrame(retry);
+    };
+    requestAnimationFrame(retry);
+    return;
+  }
+
+  const targetW = Math.min(760, Math.max(240, window.innerWidth - 44));
+  const targetStageH = Math.min(300, Math.max(140, window.innerHeight * 0.52));
+  const otherH = Math.max(0, hNow - Math.max(0, stageRect.height) - Math.max(0, actionsRect.height));
+  const targetH = otherH + targetStageH + Math.max(0, actionsRect.height);
+
+  const spawnW = Math.max(wNow, targetW);
+  const spawnH = Math.max(hNow, targetH);
+
+  const getBounds = () => {
+    const r = box.getBoundingClientRect();
+    const w = Math.max(1, r.width);
+    const h = Math.max(1, r.height);
+    return {
+      w: Math.max(w, targetW),
+      h: Math.max(h, targetH),
+    };
+  };
+
+  const baseCount = Math.round(56 + Math.min(44, spawnW / 32));
+  const count = Math.min(120, Math.max(30, baseCount));
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "heart";
+    const size = Math.round(rand(12, 26));
+    const { c, glow } = pick(palette);
+    el.style.setProperty("--s", `${size}px`);
+    el.style.setProperty("--c", c);
+    el.style.setProperty("--glow", glow);
+    el.style.setProperty("--a", String(rand(0.55, 0.92)));
+    layer.appendChild(el);
+
+    // Slower baseline speeds, but with chaotic wobble applied each frame.
+    const speed = rand(22, 64); // px/s
+    const angle = rand(0, Math.PI * 2);
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
+
+    // Spawn random across the whole *target* box (so it's not concentrated early).
+    const spawnPad = 6;
+    const x = rand(spawnPad, Math.max(spawnPad, spawnW - size - spawnPad));
+    const y = rand(spawnPad, Math.max(spawnPad, spawnH - size - spawnPad));
+
+    const rot = rand(-18, 18);
+    const vr = rand(-120, 120); // deg/s
+    el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${45 + rot}deg)`;
+    state.hearts.push({ el, x, y, vx, vy, size, rot, vr });
+  }
+
+  state.heartsLastTs = 0;
+  const pad = 2;
+
+  const tick = (ts) => {
+    if (overlay.classList.contains("hidden")) {
+      stopHeartsScreensaver();
+      return;
+    }
+
+    if (!state.heartsLastTs) state.heartsLastTs = ts - 16.7;
+
+    const dt = Math.min(0.034, Math.max(0.010, (ts - (state.heartsLastTs || ts)) / 1000));
+    state.heartsLastTs = ts;
+
+    const { w, h } = getBounds();
+
+    for (const heart of state.hearts) {
+      // Chaotic wobble: small random acceleration that changes every frame.
+      const boost = Math.max(0.6, Number(state.heartsBoost) || 1);
+      const wobble = 36 * boost;
+      heart.vx += rand(-wobble, wobble) * dt;
+      heart.vy += rand(-wobble, wobble) * dt;
+
+      // Keep speeds in a pleasant range.
+      const sp = Math.hypot(heart.vx, heart.vy);
+      const minSp = 18;
+      const maxSp = 84;
+      if (sp > 0.0001) {
+        const target = sp < minSp ? minSp : sp > maxSp ? maxSp : sp;
+        if (target !== sp) {
+          const k = target / sp;
+          heart.vx *= k;
+          heart.vy *= k;
+        }
+      }
+
+      heart.x += heart.vx * dt * boost;
+      heart.y += heart.vy * dt * boost;
+
+      heart.rot = (Number(heart.rot) || 0) + (Number(heart.vr) || 0) * dt;
+
+      const maxX = Math.max(pad, w - heart.size - pad);
+      const maxY = Math.max(pad, h - heart.size - pad);
+
+      if (heart.x <= pad) {
+        heart.x = pad;
+        heart.vx = Math.abs(heart.vx);
+      } else if (heart.x >= maxX) {
+        heart.x = maxX;
+        heart.vx = -Math.abs(heart.vx);
+      }
+
+      if (heart.y <= pad) {
+        heart.y = pad;
+        heart.vy = Math.abs(heart.vy);
+      } else if (heart.y >= maxY) {
+        heart.y = maxY;
+        heart.vy = -Math.abs(heart.vy);
+      }
+
+      heart.el.style.transform = `translate3d(${heart.x}px, ${heart.y}px, 0) rotate(${45 + (Number(heart.rot) || 0)}deg)`;
+    }
+
+    state.heartsRaf = requestAnimationFrame(tick);
+  };
+
+  state.heartsRaf = requestAnimationFrame(tick);
+}
+
+function applyValentineButtonScaling(noClicks) {
+  const noBtn = els.valentineNoBtn;
+  const acceptBtn = els.valentineAcceptBtn;
+  if (!noBtn || !acceptBtn) return;
+
+  const n = Math.max(0, Number(noClicks) || 0);
+  // Avoid transforms (button:active uses transform). Adjust size via font/padding so layout reflows and buttons never overlap.
+  const noFont = Math.max(8, 16 - n * 0.95);
+  const acceptFont = Math.min(44, 16 + n * 2.65);
+  const noPadY = Math.max(6, 12 - n * 0.65);
+  const acceptPadY = Math.min(34, 12 + n * 1.45);
+
+  noBtn.style.fontSize = `${noFont}px`;
+  acceptBtn.style.fontSize = `${acceptFont}px`;
+  noBtn.style.padding = `${noPadY}px 14px`;
+  acceptBtn.style.padding = `${acceptPadY}px 16px`;
+}
+
+function onValentineNo() {
+  state.valentineNoClicks = (Number(state.valentineNoClicks) || 0) + 1;
+  applyValentineButtonScaling(state.valentineNoClicks);
+
+  const box = els.matrixBox;
+  if (box) {
+    const base = 1.22;
+    const extra = Math.min(0.05, (Number(state.valentineNoClicks) || 0) * 0.006);
+    box.style.setProperty("--bugScale", String(base + extra));
+    box.classList.remove("shake");
+    void box.offsetWidth;
+    box.classList.add("shake");
+  }
+}
+
+async function playValentineAcceptCinematic() {
+  const box = els.matrixBox;
+  const canvas = els.bugCanvas;
+  if (!box || !canvas) return;
+
+  for (const t of state.cinematicTimers) clearTimeout(t);
+  state.cinematicTimers = [];
+
+  box.classList.add("cinematic");
+  state.heartsBoost = 2.8;
+
+  const rect = canvas.getBoundingClientRect();
+  const width = Math.max(1, rect.width);
+  const height = Math.max(1, rect.height);
+  const rand = (min, max) => min + Math.random() * (max - min);
+
+  const spawnHeartRain = () => {
+    // Spawn a small burst of falling hearts on top of the existing rain.
+    const burst = 10;
+    for (let i = 0; i < burst; i++) {
+      const el = document.createElement("span");
+      el.className = "rainLetter ghost";
+      el.textContent = "♥";
+      const x = rand(0, Math.max(1, width));
+      const dx = rand(-120, 120);
+      const fall = height + rand(40, 180);
+      const dur = rand(900, 1700);
+      const delay = rand(0, 120);
+
+      const h = Math.floor(rand(330, 20) + 360) % 360;
+      el.style.setProperty("--c", `hsla(${h}, 88%, 72%, 0.95)`);
+      el.style.setProperty("--glow", `hsla(${h}, 88%, 45%, 0.22)`);
+      el.style.fontSize = `${Math.round(rand(16, 26))}px`;
+      el.style.left = `${x}px`;
+      el.style.setProperty("--dx", `${dx}px`);
+      el.style.setProperty("--fall", `${fall}px`);
+      el.style.animation = `rainFall ${dur}ms linear ${delay}ms 1 forwards`;
+      canvas.appendChild(el);
+      const t = window.setTimeout(() => el.remove(), delay + dur + 120);
+      state.cinematicTimers.push(t);
+    }
+  };
+
+  const start = performance.now();
+  const durationMs = 1700;
+  const pump = () => {
+    if (performance.now() - start > durationMs) return;
+    spawnHeartRain();
+    const t = window.setTimeout(pump, 140);
+    state.cinematicTimers.push(t);
+  };
+  pump();
+
+  await new Promise((r) => {
+    const t = window.setTimeout(r, durationMs);
+    state.cinematicTimers.push(t);
+  });
+
+  state.heartsBoost = 1;
+  box.classList.remove("cinematic");
+}
+
+function assembleBugMessage(lines) {
+  // Kept for compatibility; message is now assembled from raining letters.
+}
+
+function startBugRainAndAssembleMessage(lines) {
+  const canvas = els.bugCanvas;
+  if (!canvas) return 0;
+
+  canvas.innerHTML = "";
+  const rect = canvas.getBoundingClientRect();
+  const width = Math.max(1, rect.width);
+  const height = Math.max(1, rect.height);
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789♥";
+
+  const confettiColor = () => {
+    const h = Math.floor(rand(0, 360));
+    const s = Math.floor(rand(78, 96));
+    const l = Math.floor(rand(58, 76));
+    return {
+      c: `hsla(${h}, ${s}%, ${l}%, 0.90)`,
+      glow: `hsla(${h}, ${s}%, ${Math.max(20, l - 20)}%, 0.22)`,
+    };
+  };
+
+  const spawnRainLetter = ({ ch, cls, x, dx, fall, dur, delay }) => {
+    const el = document.createElement("span");
+    el.className = cls;
+    el.textContent = ch;
+    if (!cls.includes(" msg")) {
+      const { c, glow } = confettiColor();
+      el.style.setProperty("--c", c);
+      el.style.setProperty("--glow", glow);
+      el.style.fontSize = `${Math.round(rand(14, 22))}px`;
+    }
+    el.style.left = `${x}px`;
+    el.style.setProperty("--dx", `${dx}px`);
+    el.style.setProperty("--fall", `${fall}px`);
+    el.style.animation = `rainFall ${dur}ms linear ${delay}ms 1 forwards`;
+    canvas.appendChild(el);
+    // Keep DOM light: background rain gets removed after it finished.
+    if (!cls.includes(" msg")) {
+      const t = window.setTimeout(() => el.remove(), delay + dur + 80);
+      state.bugLetterTimers.push(t);
+    }
+  };
+
+  // Random rain (background noise)
+  const initialCount = Math.round(260 + Math.min(220, width / 2.4));
+  for (let i = 0; i < initialCount; i++) {
+    const ch = randomChars[Math.floor(Math.random() * randomChars.length)];
+    spawnRainLetter({
+      ch,
+      cls: "rainLetter" + (Math.random() < 0.66 ? " ghost" : ""),
+      x: rand(0, width),
+      dx: rand(-240, 240),
+      fall: rand(height * 0.75, height * 1.35),
+      dur: rand(1400, 2800),
+      delay: rand(0, 1200),
+    });
+  }
+
+  // Aggressive continuous rain for a few seconds.
+  const burstForMs = 5200;
+  const burstStart = performance.now();
+  const loop = () => {
+    const now = performance.now();
+    if (now - burstStart > burstForMs) return;
+    const burst = 26 + Math.floor(Math.random() * 18);
+    for (let i = 0; i < burst; i++) {
+      const ch = randomChars[Math.floor(Math.random() * randomChars.length)];
+      spawnRainLetter({
+        ch,
+        cls: "rainLetter" + (Math.random() < 0.70 ? " ghost" : ""),
+        x: rand(0, width),
+        dx: rand(-320, 320),
+        fall: rand(height * 0.80, height * 1.45),
+        dur: rand(1100, 2400),
+        delay: rand(0, 240),
+      });
+    }
+    const t = window.setTimeout(loop, 90 + Math.random() * 90);
+    state.bugLetterTimers.push(t);
+  };
+  loop();
+
+  // Message letters (they are also falling letters) centered in the bug canvas.
+  const usableH = height;
+
+  const maxLen = Math.max(1, ...lines.map((l) => String(l || "").length));
+  const padX = 18;
+  const letterW = Math.max(12, Math.min(26, Math.floor((width - padX * 2) / maxLen)));
+  const fontSize = Math.round(letterW * 1.25);
+  const lineH = Math.round(fontSize * 1.75);
+  const totalMsgH = (lines.length - 1) * lineH;
+  const startY = Math.round((usableH - totalMsgH) / 2);
+  let messageEndMs = 0;
+
+  for (let li = 0; li < lines.length; li++) {
+    const line = String(lines[li] || "").toUpperCase();
+    const lineWidth = Math.max(0, (line.length - 1) * letterW);
+    const baseX = Math.max(0, (width - lineWidth) / 2);
+    const y = Math.max(0, Math.min(usableH - fontSize - 4, startY + li * lineH));
+
+    for (let ci = 0; ci < line.length; ci++) {
+      const c = line[ci];
+      if (c === " ") continue;
+
+      const el = document.createElement("span");
+      el.className = "rainLetter msg";
+      el.textContent = c;
+      el.style.fontSize = `${fontSize}px`;
+      el.style.setProperty("--c", "rgba(254,202,202,0.98)");
+      el.style.setProperty("--glow", "rgba(239,68,68,0.22)");
+
+      const tx = baseX + ci * letterW;
+      const ty = y;
+      const fall = ty + 40;
+      const dur = rand(1400, 2700);
+      const delay = rand(550, 1900);
+
+      el.style.left = `${tx}px`;
+      el.style.setProperty("--dx", `${rand(-340, 340)}px`);
+      el.style.setProperty("--fall", `${fall}px`);
+      el.style.animation = `rainFall ${dur}ms linear ${delay}ms 1 forwards`;
+
+      messageEndMs = Math.max(messageEndMs, delay + dur);
+      canvas.appendChild(el);
+    }
+  }
+
+  // Fade background rain once message has formed.
+  const fadeT = window.setTimeout(() => {
+    for (const el of Array.from(canvas.querySelectorAll(".rainLetter:not(.msg)"))) {
+      el.classList.add("fade");
+      el.style.transition = "opacity 700ms ease";
+    }
+    const cleanup = window.setTimeout(() => {
+      for (const el of Array.from(canvas.querySelectorAll(".rainLetter.fade"))) el.remove();
+    }, 900);
+    state.bugLetterTimers.push(cleanup);
+  }, Math.max(900, Math.ceil(messageEndMs) + 120));
+
+  state.bugLetterTimers.push(fadeT);
+
+  return messageEndMs;
+}
+
+async function playValentineBug(finalLetter) {
+  const overlay = els.letterOverlay;
+  const box = els.matrixBox;
+  const letterEl = els.matrixLetter;
+  const hintEl = els.matrixHint;
+  if (!overlay || !box || !letterEl) return;
+
+  for (const t of state.bugLetterTimers) clearTimeout(t);
+  state.bugLetterTimers = [];
+
+  overlay.classList.remove("hidden");
+  overlay.setAttribute("aria-hidden", "false");
+  box.classList.remove("bug");
+  box.classList.remove("shake");
+  els.valentineNoBtn?.classList.add("hidden");
+  els.valentineAcceptBtn?.classList.add("hidden");
+  if (els.bugCanvas) els.bugCanvas.innerHTML = "";
+  if (els.giftLayer) {
+    els.giftLayer.classList.add("hidden");
+    els.giftLayer.setAttribute("aria-hidden", "true");
+    els.giftLayer.dataset.ready = "";
+    els.giftLayer.innerHTML = "";
+  }
+  resetNoButtonPosition();
+
+  // Reset letter state.
+  letterEl.classList.remove("glitch");
+  letterEl.classList.remove("vanish");
+  letterEl.style.opacity = "1";
+  letterEl.style.display = "";
+  letterEl.classList.add("loading");
+
+  if (hintEl) hintEl.textContent = "Se alege litera...";
+
+  // Phase 1: normal-ish selection (spins), no final letter reveal.
+  const allowed = getAllowedLetters();
+  const phase1Ms = 3400;
+  const phase1End = performance.now() + phase1Ms;
+  let raf = 0;
+  const tick = () => {
+    const now = performance.now();
+    if (now >= phase1End) {
+      cancelAnimationFrame(raf);
+      return;
+    }
+    letterEl.textContent = allowed[Math.floor(Math.random() * allowed.length)];
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+
+  // Phase 2: takeover begins inside the same frame: gradual red/scale (CSS transitions are slow on purpose).
+  await new Promise((r) => window.setTimeout(r, phase1Ms + 120));
+  const bugStart = performance.now();
+  box.classList.add("bug");
+  // Hearts appear only once the box starts growing.
+  startHeartsScreensaver();
+  // Once the box starts growing/red, hide the letter completely.
+  letterEl.classList.remove("loading");
+  letterEl.classList.remove("glitch");
+  letterEl.classList.remove("vanish");
+  letterEl.style.display = "none";
+  letterEl.textContent = "";
+  if (hintEl) hintEl.textContent = "Se alege litera...";
+
+  // Corrupt the chosen letter briefly, then remove it.
+  const corruptForMs = 0;
+  const corruptEnd = performance.now() + corruptForMs;
+  let raf2 = 0;
+  const tick2 = () => {
+    const now = performance.now();
+    if (now >= corruptEnd) {
+      cancelAnimationFrame(raf2);
+      return;
+    }
+    letterEl.textContent = allowed[Math.floor(Math.random() * allowed.length)];
+    raf2 = requestAnimationFrame(tick2);
+  };
+  raf2 = requestAnimationFrame(tick2);
+
+  // Phase 3: start the aggressive rain shortly after takeover starts.
+  await new Promise((r) => window.setTimeout(r, 680));
+  if (hintEl) hintEl.textContent = "";
+  // 1–2 sec gradual takeover happens via CSS transitions while letters rain.
+  const messageEndMs = Number(startBugRainAndAssembleMessage(VALENTINE_EVENT.messageLines) || 0);
+
+  // Show the buttons only after the text has fully formed.
+  // Requirement: ~4–5s after the box starts enlarging ("bug" starts), aligned with the completed message.
+  const minButtonsAfterBugMs = 4500;
+  const revealAfterBugMs = Math.max(minButtonsAfterBugMs, 680 + messageEndMs);
+  const revealAt = bugStart + revealAfterBugMs;
+  const revealIn = Math.max(0, Math.ceil(revealAt - performance.now()));
+
+  const t = window.setTimeout(() => {
+    const stage = String((state.room?.event || {}).stage || "bug");
+    if (stage !== "bug") return;
+    if (overlay.classList.contains("hidden")) return;
+
+    els.valentineNoBtn?.classList.remove("hidden");
+    els.valentineAcceptBtn?.classList.remove("hidden");
+    if (els.valentineAcceptBtn) els.valentineAcceptBtn.textContent = "Da";
+    applyValentineButtonScaling(0);
+  }, revealIn);
+  state.bugLetterTimers.push(t);
 }
 
 function getAllowedLetters() {
@@ -574,11 +1520,29 @@ async function finishRound(roomId) {
       [p2Uid]: Number(matchTotals[p2Uid] || 0) + Number(computed.totals[p2Uid] || 0),
     };
 
+    const existingEvent = room.event || {};
+    const alreadyUnlocked = existingEvent?.id === VALENTINE_EVENT.id && Boolean(existingEvent?.unlocked);
+    const maxMatch = Math.max(Number(nextMatchTotals[p1Uid] || 0), Number(nextMatchTotals[p2Uid] || 0));
+    const unlockNow = !alreadyUnlocked && maxMatch >= VALENTINE_EVENT.threshold;
+
     tx.update(ref, {
       status: "finished",
       finishedAt: serverTimestamp(),
       finishedBy: state.uid,
       matchTotals: nextMatchTotals,
+      ...(unlockNow
+        ? {
+            event: {
+              id: VALENTINE_EVENT.id,
+              unlocked: true,
+              unlockedAt: serverTimestamp(),
+              unlockedAtMs: Date.now(),
+              bugReady: false,
+              triggered: false,
+              completed: false,
+            },
+          }
+        : {}),
       final: {
         letter,
         categories,
@@ -613,6 +1577,9 @@ async function resetRoom(roomId) {
 
     const nextRound = (Number.isFinite(room.round) ? room.round : 1) + 1;
 
+    const existingEvent = room.event || {};
+    const canArmBug = existingEvent?.id === VALENTINE_EVENT.id && Boolean(existingEvent?.unlocked) && !Boolean(existingEvent?.triggered);
+
     tx.update(ref, {
       status: "lobby",
       round: nextRound,
@@ -625,6 +1592,16 @@ async function resetRoom(roomId) {
       finishedAt: null,
       finishedBy: "",
       final: null,
+      ...(canArmBug
+        ? {
+            event: {
+              ...existingEvent,
+              bugReady: true,
+              bugReadyAt: serverTimestamp(),
+              bugReadyAtMs: Date.now(),
+            },
+          }
+        : {}),
       lastUpdateAt: serverTimestamp(),
     });
   });
@@ -646,6 +1623,7 @@ async function leaveRoom() {
   state.room = null;
   state.roomId = null;
   state.myRole = null;
+  setValentineMode(false);
   clearLocalAnswers();
 
   const url = new URL(window.location.href);
@@ -751,6 +1729,7 @@ function renderResultsIfFinished(room) {
   if (isFinished) {
     els.answersForm?.classList.add("hidden");
   }
+
   if (!isFinished) return;
 
   const final = room.final;
@@ -770,6 +1749,41 @@ function renderResultsIfFinished(room) {
   els.resultsMeta.textContent = `Runda ${roundNo} • Finish: ${finishBy} • Runda: J1=${p1Total} / J2=${p2Total} • Parcurs: J1=${p1Match} / J2=${p2Match}`;
 
   els.resultsTable.innerHTML = buildResultsTableHtml(final);
+}
+
+async function completeValentineEvent({ enableMode, returnToLobby } = {}) {
+  if (!state.roomId) return;
+
+  const ref = doc(db, "rooms", state.roomId);
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists()) return;
+    const room = snap.data();
+    const event = room.event || {};
+    if (event?.id !== VALENTINE_EVENT.id || !event?.triggered) return;
+    if (Boolean(event?.completed)) return;
+
+    const nowMs = Date.now();
+    tx.update(ref, {
+      event: {
+        ...event,
+        completed: true,
+        completedAt: serverTimestamp(),
+        completedAtMs: nowMs,
+        completedBy: state.uid,
+        stage: "done",
+        ...(enableMode ? { mode: true, modeEnabledAt: serverTimestamp(), modeEnabledAtMs: nowMs } : {}),
+      },
+      ...(returnToLobby
+        ? {
+            status: "lobby",
+            startedAt: null,
+            startedAtMs: null,
+          }
+        : {}),
+      lastUpdateAt: serverTimestamp(),
+    });
+  });
 }
 
 async function markLeftAndMaybeDelete(roomId) {
